@@ -7,7 +7,18 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
+    
+    
+    @State private var authenticated : Bool = false
+    
+    //Name : ImagePath, Stars, Location
+    @State private var demoRestaurants : [Restaurant] = [
+    Restaurant(id: UUID(), name: "Bob's Palace", location: "close", stars: 3, images: [], descriptors: [])
+    ]
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -34,7 +45,7 @@ struct ContentView: View {
                         .fontWeight(.bold)
                     }
                 .padding(5)
-                NavigationLink(destination: NoSignIn()) {
+                NavigationLink(destination: RestaurantLoadView()) {
                     Text("Proceed without logging in")
                        .foregroundColor(.black)
                        .font(.system(size:20))
@@ -50,6 +61,11 @@ struct ContentView: View {
         }
         .padding()
          */
+        
+    }
+    
+    func restaurants() -> Array<Restaurant>{
+        return demoRestaurants
     }
 }
 
@@ -69,6 +85,27 @@ struct SignUp : View{
     }
 }
 
+struct RestaurantLoadView : View {
+    
+    var body: some View {
+        VStack{
+            ForEach(ContentView().restaurants()){item in
+                Text(item.name)
+                    .font(.system(size: 40))
+                    .fontWeight(.bold)
+                    .padding(5)
+                    .multilineTextAlignment(.trailing)
+                HStack{
+                    Text("Location: " + item.location)
+                    Text("Stars: " + String(item.stars))
+
+                }
+            }
+        }
+
+    }
+}
+
 struct NoSignIn : View {
     var body: some View {
         Text("No sign in")
@@ -78,8 +115,21 @@ struct NoSignIn : View {
 #Preview {
     ContentView()
 }
+
 struct Views: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+
+struct Restaurant : Identifiable{
+    var id = UUID()
+    var name : String
+    var location : String
+    var stars : Int
+    var images : [String] = []
+    var descriptors : [String] = []
+    
+    
 }
